@@ -3,57 +3,54 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-<meta name="theme-color" content="#0d0f14"/>
+<meta name="theme-color" content="#f5f2ee"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
 <title>LocalComp — Complaint Portal</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 :root {
-  --bg: #0d0f14;
-  --surface: #151820;
-  --surface2: #1c2030;
-  --border: rgba(255,255,255,0.07);
-  --accent: #e8a838;
-  --accent2: #e85538;
-  --text: #e8eaf0;
-  --muted: #7a8099;
-  --success: #38c96e;
-  --error: #e85538;
+  --bg: #f5f2ee;
+  --bg2: #ede9e3;
+  --surface: #ffffff;
+  --surface2: #f8f5f0;
+  --border: rgba(0,0,0,0.09);
+  --border-strong: rgba(0,0,0,0.15);
+  --accent: #c84b2f;
+  --accent2: #1a3a5c;
+  --accent-light: rgba(200,75,47,0.08);
+  --text: #1a1612;
+  --text2: #3d3530;
+  --muted: #8a7f76;
+  --success: #2d7a4f;
+  --error: #c84b2f;
   --radius: 14px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 8px 32px rgba(0,0,0,0.10);
+  --shadow-lg: 0 20px 60px rgba(0,0,0,0.12);
 }
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html { scroll-behavior: smooth; }
 
 body {
-  font-family: 'Outfit', sans-serif;
+  font-family: 'DM Sans', sans-serif;
   background: var(--bg);
   color: var(--text);
   min-height: 100vh;
-  min-height: -webkit-fill-available;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Mobile keyboard fix */
-body.keyboard-open .form-actions { position: static; }
-
-/* Grain */
+/* Subtle paper texture overlay */
 body::before {
   content: '';
   position: fixed; inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
   pointer-events: none; z-index: 0;
 }
-
-.blob {
-  position: fixed; border-radius: 50%; filter: blur(120px); opacity: 0.1; pointer-events: none; z-index: 0;
-}
-.blob-1 { width: 500px; height: 500px; background: var(--accent); top: -200px; right: -150px; }
-.blob-2 { width: 400px; height: 400px; background: var(--accent2); bottom: -150px; left: -150px; }
 
 /* ── LOADING SCREEN ── */
 #loading-screen {
@@ -64,104 +61,96 @@ body::before {
 }
 #loading-screen.hidden { opacity: 0; visibility: hidden; }
 .load-logo {
-  width: 60px; height: 60px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  width: 64px; height: 64px;
+  background: var(--accent);
+  border-radius: 20px; display: flex; align-items: center; justify-content: center;
   font-size: 28px; margin-bottom: 20px;
-  animation: pulse 1.5s ease infinite;
+  animation: breathe 2s ease infinite;
 }
-.load-text { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; margin-bottom: 8px; }
+.load-text { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
 .load-sub { color: var(--muted); font-size: 13px; }
-@keyframes pulse { 0%,100%{transform:scale(1)}50%{transform:scale(1.05)} }
+@keyframes breathe { 0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.04);opacity:0.85} }
 
 /* ── AUTH SCREEN ── */
 #auth-screen {
   position: fixed; inset: 0; z-index: 100;
   display: flex; align-items: center; justify-content: center;
   background: var(--bg);
-  padding: 16px;
-  padding-top: calc(16px + var(--safe-top));
-  padding-bottom: calc(16px + var(--safe-bottom));
+  padding: 20px;
+  padding-top: calc(20px + var(--safe-top));
+  padding-bottom: calc(20px + var(--safe-bottom));
   overflow-y: auto;
   transition: opacity 0.4s, transform 0.4s;
 }
-#auth-screen.hidden { opacity: 0; pointer-events: none; transform: translateY(-16px); }
+#auth-screen.hidden { opacity: 0; pointer-events: none; transform: translateY(-12px); }
 
 .auth-card {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 24px;
-  padding: 36px 32px;
+  padding: 40px 36px;
   width: 100%; max-width: 420px;
-  position: relative; z-index: 1;
-  box-shadow: 0 32px 80px rgba(0,0,0,0.6);
+  box-shadow: var(--shadow-lg);
   animation: slideUp 0.5s ease;
 }
-@media (max-width: 480px) {
-  .auth-card { padding: 28px 20px; border-radius: 20px; }
-}
+@media (max-width: 480px) { .auth-card { padding: 28px 20px; border-radius: 20px; } }
 
-.auth-logo { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; }
+.auth-logo { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
 .auth-logo .icon {
-  width: 40px; height: 40px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px;
+  width: 44px; height: 44px;
+  background: var(--accent); border-radius: 12px;
+  display: flex; align-items: center; justify-content: center; font-size: 20px;
   flex-shrink: 0;
 }
-.auth-logo span { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; }
+.auth-logo span { font-family: 'Fraunces', serif; font-size: 24px; font-weight: 700; color: var(--text); }
 
-.auth-title { font-family: 'Syne', sans-serif; font-size: 26px; font-weight: 700; margin-bottom: 6px; }
-.auth-sub { color: var(--muted); font-size: 14px; margin-bottom: 28px; line-height: 1.5; }
+.auth-title { font-family: 'Fraunces', serif; font-size: 28px; font-weight: 700; margin-bottom: 6px; line-height: 1.2; }
+.auth-sub { color: var(--muted); font-size: 14px; margin-bottom: 28px; line-height: 1.6; }
 
 .tab-row {
-  display: flex; background: var(--surface2); border-radius: 12px;
+  display: flex; background: var(--bg2); border-radius: 12px;
   padding: 4px; gap: 4px; margin-bottom: 24px;
 }
 .tab-btn {
   flex: 1; padding: 10px; border: none; background: transparent;
-  color: var(--muted); font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 600;
+  color: var(--muted); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
   border-radius: 9px; cursor: pointer; transition: all 0.2s;
-  /* Mobile: make tappable */
   min-height: 44px; touch-action: manipulation;
 }
-.tab-btn.active { background: var(--accent); color: #000; }
+.tab-btn.active { background: var(--surface); color: var(--text); box-shadow: var(--shadow-sm); }
 
 .field { margin-bottom: 16px; }
 .field label {
-  display: block; font-size: 12px; font-weight: 600; color: var(--muted);
-  margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.8px;
+  display: block; font-size: 11px; font-weight: 600; color: var(--muted);
+  margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.9px;
 }
 .field input {
-  width: 100%;
-  /* CRITICAL: font-size 16px prevents iOS zoom */
-  font-size: 16px !important;
-  padding: 14px 16px;
+  width: 100%; font-size: 16px !important;
+  padding: 13px 16px;
   background: var(--surface2); border: 1.5px solid var(--border);
-  border-radius: 12px; color: var(--text); font-family: 'Outfit', sans-serif;
+  border-radius: 11px; color: var(--text); font-family: 'DM Sans', sans-serif;
   outline: none; transition: border-color 0.2s, box-shadow 0.2s;
-  -webkit-appearance: none; appearance: none;
-  /* Fix iOS input styling */
-  -webkit-border-radius: 12px;
+  -webkit-appearance: none; -webkit-border-radius: 11px;
 }
-.field input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(232,168,56,0.12); }
-/* Fix autofill styling on mobile */
+.field input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(200,75,47,0.1); }
 .field input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px var(--surface2) inset !important;
   -webkit-text-fill-color: var(--text) !important;
 }
+.field input::placeholder { color: var(--muted); }
 
 .btn-primary {
-  width: 100%; padding: 16px;
-  background: linear-gradient(135deg, var(--accent), #d4902a);
-  border: none; border-radius: 12px;
-  color: #000; font-family: 'Outfit', sans-serif; font-size: 16px; font-weight: 700;
+  width: 100%; padding: 15px;
+  background: var(--accent);
+  border: none; border-radius: 11px;
+  color: #fff; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
   cursor: pointer; margin-top: 8px; transition: opacity 0.2s, transform 0.1s;
-  min-height: 52px; touch-action: manipulation;
-  -webkit-appearance: none;
+  min-height: 52px; touch-action: manipulation; -webkit-appearance: none;
+  letter-spacing: 0.2px;
 }
-.btn-primary:hover { opacity: 0.9; }
+.btn-primary:hover { opacity: 0.88; }
 .btn-primary:active { transform: scale(0.97); }
-.btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
 
 .divider {
   display: flex; align-items: center; gap: 12px;
@@ -170,19 +159,17 @@ body::before {
 .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
 .btn-google {
-  width: 100%; padding: 14px;
-  background: var(--surface2); border: 1.5px solid var(--border); border-radius: 12px;
-  color: var(--text); font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 500;
+  width: 100%; padding: 13px;
+  background: var(--surface2); border: 1.5px solid var(--border); border-radius: 11px;
+  color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
   cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px;
-  transition: border-color 0.2s; min-height: 52px; touch-action: manipulation;
-  -webkit-appearance: none;
+  transition: border-color 0.2s, background 0.2s; min-height: 50px; touch-action: manipulation;
 }
-.btn-google:hover { border-color: var(--accent); }
-.btn-google:active { transform: scale(0.98); }
+.btn-google:hover { border-color: var(--border-strong); background: var(--bg2); }
 
 .auth-msg { font-size: 13px; text-align: center; margin-top: 12px; min-height: 20px; padding: 6px 0; border-radius: 8px; transition: all 0.2s; }
-.auth-msg.error { color: var(--error); background: rgba(232,85,56,0.08); padding: 8px 12px; }
-.auth-msg.success { color: var(--success); background: rgba(56,201,110,0.08); padding: 8px 12px; }
+.auth-msg.error { color: var(--error); background: rgba(200,75,47,0.07); padding: 8px 12px; }
+.auth-msg.success { color: var(--success); background: rgba(45,122,79,0.08); padding: 8px 12px; }
 
 /* ── MAIN APP ── */
 #app { position: relative; z-index: 1; display: none; }
@@ -192,179 +179,188 @@ body::before {
 nav {
   position: sticky; top: 0; z-index: 50;
   display: flex; align-items: center; justify-content: space-between;
-  padding: 0 24px; height: 60px;
+  padding: 0 28px; height: 62px;
   padding-top: var(--safe-top);
-  background: rgba(13,15,20,0.9); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  background: rgba(245,242,238,0.92); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
   border-bottom: 1px solid var(--border);
 }
-@media (max-width: 480px) {
-  nav { padding: 0 16px; height: 56px; }
-}
-.nav-brand { display: flex; align-items: center; gap: 8px; }
+@media (max-width: 480px) { nav { padding: 0 16px; height: 56px; } }
+.nav-brand { display: flex; align-items: center; gap: 10px; }
 .nav-icon {
-  width: 32px; height: 32px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 15px;
+  width: 34px; height: 34px;
+  background: var(--accent); border-radius: 9px;
+  display: flex; align-items: center; justify-content: center; font-size: 16px;
 }
-.nav-brand span { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 800; }
+.nav-brand span { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: var(--text); }
 
 .nav-right { display: flex; align-items: center; gap: 10px; }
 .user-pill {
   display: flex; align-items: center; gap: 8px;
-  background: var(--surface2); border: 1px solid var(--border);
-  border-radius: 50px; padding: 5px 12px 5px 5px;
-  max-width: 160px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 50px; padding: 5px 14px 5px 5px;
+  max-width: 180px; box-shadow: var(--shadow-sm);
 }
 .user-avatar {
-  width: 26px; height: 26px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--accent2);
   display: flex; align-items: center; justify-content: center;
-  font-size: 11px; font-weight: 700; color: #000; flex-shrink: 0;
+  font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0;
 }
-.user-name { font-size: 13px; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.user-name { font-size: 13px; font-weight: 500; color: var(--text2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .btn-logout {
   background: transparent; border: 1px solid var(--border); border-radius: 8px;
-  color: var(--muted); padding: 7px 12px; font-size: 13px; cursor: pointer;
-  font-family: 'Outfit', sans-serif; transition: all 0.2s;
+  color: var(--muted); padding: 7px 14px; font-size: 13px; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; transition: all 0.2s;
   touch-action: manipulation; min-height: 36px; white-space: nowrap;
 }
-.btn-logout:hover { border-color: var(--accent2); color: var(--accent2); }
+.btn-logout:hover { border-color: var(--accent); color: var(--accent); }
 
 /* HERO */
 .hero {
-  text-align: center; padding: 60px 24px 48px;
-  max-width: 680px; margin: 0 auto;
+  text-align: center; padding: 64px 24px 52px;
+  max-width: 680px; margin: 0 auto; position: relative; z-index: 1;
 }
-@media (max-width: 480px) { .hero { padding: 40px 16px 32px; } }
+@media (max-width: 480px) { .hero { padding: 44px 16px 36px; } }
 .hero-badge {
   display: inline-flex; align-items: center; gap: 6px;
-  background: rgba(232,168,56,0.1); border: 1px solid rgba(232,168,56,0.2);
-  border-radius: 50px; padding: 6px 14px; font-size: 11px; font-weight: 700;
-  color: var(--accent); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 20px;
+  background: rgba(200,75,47,0.09); border: 1px solid rgba(200,75,47,0.18);
+  border-radius: 50px; padding: 6px 16px; font-size: 11px; font-weight: 600;
+  color: var(--accent); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 22px;
 }
 .hero h1 {
-  font-family: 'Syne', sans-serif;
-  font-size: clamp(30px, 6vw, 52px); font-weight: 800; line-height: 1.1;
-  margin-bottom: 14px;
+  font-family: 'Fraunces', serif;
+  font-size: clamp(32px, 6vw, 56px); font-weight: 900; line-height: 1.05;
+  margin-bottom: 16px; color: var(--text);
 }
-.hero h1 span { color: var(--accent); }
-.hero p { color: var(--muted); font-size: 16px; line-height: 1.7; }
+.hero h1 em { font-style: italic; color: var(--accent); }
+.hero p { color: var(--muted); font-size: 16px; line-height: 1.75; max-width: 480px; margin: 0 auto; }
 @media (max-width: 480px) { .hero p { font-size: 14px; } }
+
+/* DECORATIVE LINE */
+.deco-line {
+  width: 60px; height: 3px; background: var(--accent); border-radius: 2px;
+  margin: 20px auto 0;
+}
 
 /* STATS */
 .stats-row {
   display: flex; gap: 12px; justify-content: center;
-  padding: 0 16px 48px; flex-wrap: wrap;
+  padding: 0 16px 52px; flex-wrap: wrap;
 }
 .stat-card {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: var(--radius); padding: 16px 22px; text-align: center;
+  border-radius: var(--radius); padding: 18px 24px; text-align: center;
   min-width: 120px; flex: 1; max-width: 160px;
+  box-shadow: var(--shadow-sm); position: relative; z-index: 1;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
-.stat-num { font-family: 'Syne', sans-serif; font-size: 24px; font-weight: 800; color: var(--accent); }
-.stat-label { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.stat-num { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; color: var(--accent); }
+.stat-label { font-size: 11px; color: var(--muted); margin-top: 4px; font-weight: 500; }
 
 /* FORM */
-.form-section { max-width: 860px; margin: 0 auto; padding: 0 16px 80px; }
+.form-section { max-width: 860px; margin: 0 auto; padding: 0 16px 80px; position: relative; z-index: 1; }
 
 .form-card {
   background: var(--surface); border: 1px solid var(--border);
-  border-radius: 20px; overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  border-radius: 22px; overflow: hidden;
+  box-shadow: var(--shadow-lg);
 }
 
 .form-header {
-  background: linear-gradient(135deg, #1c2030, #151820);
-  padding: 28px 32px; border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; gap: 16px;
+  background: linear-gradient(135deg, var(--accent) 0%, #a33a22 100%);
+  padding: 30px 36px; border-bottom: none;
+  display: flex; align-items: center; gap: 18px;
 }
-@media (max-width: 480px) { .form-header { padding: 20px 16px; } }
+@media (max-width: 480px) { .form-header { padding: 22px 20px; } }
 .form-header-icon {
-  width: 46px; height: 46px;
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px;
-  flex-shrink: 0;
+  width: 50px; height: 50px;
+  background: rgba(255,255,255,0.2); border-radius: 14px;
+  display: flex; align-items: center; justify-content: center; font-size: 22px;
+  flex-shrink: 0; backdrop-filter: blur(8px);
 }
-.form-header h2 { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; }
-.form-header p { color: var(--muted); font-size: 13px; margin-top: 3px; }
+.form-header h2 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 700; color: #fff; }
+.form-header p { color: rgba(255,255,255,0.7); font-size: 13px; margin-top: 3px; }
 
 /* PROGRESS */
-.progress-bar-wrap { padding: 0 24px; background: var(--surface); overflow-x: auto; -webkit-overflow-scrolling: touch; }
-.progress-steps { display: flex; border-bottom: 1px solid var(--border); min-width: max-content; }
+.progress-bar-wrap { padding: 0 28px; background: var(--bg2); overflow-x: auto; -webkit-overflow-scrolling: touch; border-bottom: 1px solid var(--border); }
+.progress-steps { display: flex; min-width: max-content; }
 .step-tab {
-  padding: 12px 16px; font-size: 12px; font-weight: 600;
+  padding: 14px 18px; font-size: 12px; font-weight: 600;
   color: var(--muted); cursor: pointer; white-space: nowrap;
   border-bottom: 2px solid transparent; transition: all 0.2s;
-  display: flex; align-items: center; gap: 6px;
+  display: flex; align-items: center; gap: 7px;
 }
 .step-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
 .step-tab.done { color: var(--success); }
 .step-dot {
-  width: 18px; height: 18px; border-radius: 50%;
-  background: var(--surface2); display: flex; align-items: center; justify-content: center;
-  font-size: 9px; font-weight: 800; flex-shrink: 0;
+  width: 20px; height: 20px; border-radius: 50%;
+  background: var(--border); display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 800; flex-shrink: 0; color: var(--muted);
 }
-.step-tab.active .step-dot { background: var(--accent); color: #000; }
-.step-tab.done .step-dot { background: var(--success); color: #000; }
+.step-tab.active .step-dot { background: var(--accent); color: #fff; }
+.step-tab.done .step-dot { background: var(--success); color: #fff; }
 
-form { padding: 32px; }
-@media (max-width: 480px) { form { padding: 20px 16px; } }
+form { padding: 36px; }
+@media (max-width: 480px) { form { padding: 22px 16px; } }
 
-.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 .form-grid .full { grid-column: 1 / -1; }
 @media (max-width: 640px) { .form-grid { grid-template-columns: 1fr; } .form-grid .full { grid-column: 1; } }
 
 .form-field { display: flex; flex-direction: column; gap: 6px; }
 .form-field label {
   font-size: 11px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: 0.8px; color: var(--muted);
+  letter-spacing: 0.9px; color: var(--muted);
 }
-.required-star { color: var(--accent2); }
+.required-star { color: var(--accent); }
 
 .form-field input,
 .form-field select,
 .form-field textarea {
   background: var(--surface2); border: 1.5px solid var(--border);
-  border-radius: 10px; padding: 13px 14px;
-  color: var(--text); font-family: 'Outfit', sans-serif;
-  /* CRITICAL: 16px prevents iOS zoom on focus */
+  border-radius: 11px; padding: 13px 15px;
+  color: var(--text); font-family: 'DM Sans', sans-serif;
   font-size: 16px !important;
   outline: none; transition: border-color 0.2s, box-shadow 0.2s;
   width: 100%;
-  -webkit-appearance: none; appearance: none;
-  -webkit-border-radius: 10px;
+  -webkit-appearance: none; -webkit-border-radius: 11px;
 }
+.form-field input::placeholder,
+.form-field textarea::placeholder { color: var(--muted); }
 .form-field input:focus,
 .form-field select:focus,
 .form-field textarea:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(232,168,56,0.1);
+  box-shadow: 0 0 0 3px rgba(200,75,47,0.09);
+  background: var(--surface);
 }
 .form-field input:-webkit-autofill {
   -webkit-box-shadow: 0 0 0 30px var(--surface2) inset !important;
   -webkit-text-fill-color: var(--text) !important;
 }
-.form-field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a8099' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
-.form-field select option { background: #1c2030; }
-.form-field textarea { resize: vertical; min-height: 110px; line-height: 1.6; }
+.form-field select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a7f76' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px;
+}
+.form-field select option { background: #fff; color: var(--text); }
+.form-field textarea { resize: vertical; min-height: 120px; line-height: 1.65; }
 
 /* CHECKBOX GROUP */
 .checkbox-group { display: flex; flex-direction: column; gap: 8px; }
 .checkbox-item {
   display: flex; align-items: center; gap: 12px;
-  padding: 12px 14px;
+  padding: 12px 15px;
   background: var(--surface2); border: 1.5px solid var(--border);
-  border-radius: 10px; cursor: pointer; transition: border-color 0.15s;
-  min-height: 48px; /* Mobile touch target */
-  -webkit-tap-highlight-color: transparent;
+  border-radius: 11px; cursor: pointer; transition: border-color 0.15s, background 0.15s;
+  min-height: 48px;
 }
-.checkbox-item:active { background: rgba(232,168,56,0.05); }
+.checkbox-item:hover { border-color: var(--border-strong); background: var(--bg2); }
 .checkbox-item input[type="checkbox"] {
-  accent-color: var(--accent); width: 18px; height: 18px; cursor: pointer;
-  flex-shrink: 0; border-radius: 4px;
+  accent-color: var(--accent); width: 18px; height: 18px; cursor: pointer; flex-shrink: 0;
 }
-.checkbox-item span { font-size: 14px; line-height: 1.3; }
+.checkbox-item span { font-size: 14px; line-height: 1.3; color: var(--text2); }
 
 /* RADIO GROUP */
 .radio-group { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -374,154 +370,153 @@ form { padding: 32px; }
   border-radius: 50px; cursor: pointer; font-size: 13px; font-weight: 600;
   transition: all 0.2s; user-select: none;
   min-height: 44px; display: flex; align-items: center;
-  touch-action: manipulation;
+  touch-action: manipulation; color: var(--text2);
 }
 .radio-pill input { display: none; }
-.radio-pill.selected { background: rgba(232,168,56,0.15); border-color: var(--accent); color: var(--accent); }
+.radio-pill.selected { background: rgba(200,75,47,0.09); border-color: var(--accent); color: var(--accent); }
 
 /* RATING */
-.stars { display: flex; gap: 8px; flex-wrap: wrap; }
+.stars { display: flex; gap: 6px; flex-wrap: wrap; }
 .star {
-  font-size: 30px; cursor: pointer; transition: transform 0.15s;
-  color: var(--surface2); min-width: 44px; min-height: 44px;
+  font-size: 28px; cursor: pointer; transition: transform 0.15s;
+  color: #d9d2c8; min-width: 44px; min-height: 44px;
   display: flex; align-items: center; justify-content: center;
   touch-action: manipulation;
 }
-.star.lit { color: var(--accent); }
+.star.lit { color: #e8a838; }
 .star:hover, .star:active { transform: scale(1.2); }
 
 /* SLIDER */
 .slider-wrap { display: flex; flex-direction: column; gap: 10px; }
-.slider-value { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; color: var(--accent); }
+.slider-value { font-family: 'Fraunces', serif; font-size: 20px; font-weight: 700; color: var(--accent); }
 input[type="range"] {
-  -webkit-appearance: none; width: 100%; height: 6px;
-  border-radius: 3px; background: var(--surface2); outline: none; cursor: pointer;
+  -webkit-appearance: none; width: 100%; height: 5px;
+  border-radius: 3px; background: var(--bg2); outline: none; cursor: pointer;
   touch-action: pan-y;
 }
 input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none; width: 24px; height: 24px;
+  -webkit-appearance: none; width: 22px; height: 22px;
   border-radius: 50%; background: var(--accent); cursor: pointer;
-  box-shadow: 0 0 0 4px rgba(232,168,56,0.2);
+  box-shadow: 0 2px 8px rgba(200,75,47,0.3);
 }
 input[type="range"]::-moz-range-thumb {
-  width: 24px; height: 24px; border: none;
+  width: 22px; height: 22px; border: none;
   border-radius: 50%; background: var(--accent); cursor: pointer;
 }
 
-/* FILE UPLOAD - Mobile optimized */
+/* FILE UPLOAD */
 .file-drop {
-  border: 2px dashed var(--border); border-radius: 12px;
-  padding: 24px 16px; text-align: center; cursor: pointer; transition: all 0.2s;
-  touch-action: manipulation; position: relative;
+  border: 2px dashed var(--border-strong); border-radius: 14px;
+  padding: 28px 20px; text-align: center; cursor: pointer; transition: all 0.2s;
+  touch-action: manipulation; background: var(--surface2);
 }
-.file-drop:hover, .file-drop.drag-over { border-color: var(--accent); background: rgba(232,168,56,0.04); }
-.file-drop .icon { font-size: 28px; margin-bottom: 8px; }
-.file-drop p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.file-drop:hover, .file-drop.drag-over {
+  border-color: var(--accent); background: rgba(200,75,47,0.04);
+}
+.file-drop .icon { font-size: 30px; margin-bottom: 10px; }
+.file-drop p { font-size: 13px; color: var(--muted); line-height: 1.6; }
 .file-drop strong { color: var(--accent); }
 .upload-btn-mobile {
   display: none;
-  margin-top: 12px;
-  padding: 10px 20px;
-  background: rgba(232,168,56,0.15); border: 1px solid var(--accent);
-  border-radius: 8px; color: var(--accent); font-family: 'Outfit', sans-serif;
-  font-size: 14px; font-weight: 600; cursor: pointer; touch-action: manipulation;
+  margin-top: 12px; padding: 10px 20px;
+  background: rgba(200,75,47,0.1); border: 1px solid rgba(200,75,47,0.3);
+  border-radius: 8px; color: var(--accent); font-family: 'DM Sans', sans-serif;
+  font-size: 14px; font-weight: 600; cursor: pointer;
 }
 @media (max-width: 640px) { .upload-btn-mobile { display: inline-block; } }
 #file-list { margin-top: 10px; }
 .file-item {
   display: flex; align-items: center; gap: 10px;
-  padding: 8px 12px; background: var(--surface2); border-radius: 8px;
-  margin-top: 6px; font-size: 13px;
+  padding: 9px 13px; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 10px; margin-top: 8px; font-size: 13px;
 }
-.file-item-thumb {
-  width: 36px; height: 36px; border-radius: 6px; object-fit: cover; flex-shrink: 0;
-}
+.file-item-thumb { width: 38px; height: 38px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
 .file-item-info { flex: 1; min-width: 0; }
-.file-item-name { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file-item-name { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text2); }
 .file-item-size { font-size: 11px; color: var(--muted); }
+.file-item-url { font-size: 10px; color: var(--success); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 200px; }
 .file-item-remove {
-  width: 24px; height: 24px; border: none; background: rgba(232,85,56,0.15);
-  border-radius: 50%; color: var(--error); cursor: pointer; font-size: 14px;
+  width: 26px; height: 26px; border: none; background: rgba(200,75,47,0.1);
+  border-radius: 50%; color: var(--accent); cursor: pointer; font-size: 13px;
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
 }
 
 /* Upload progress */
 .upload-progress {
-  margin-top: 8px; background: var(--surface2); border-radius: 8px;
-  padding: 10px 14px; font-size: 13px; display: none;
+  margin-top: 10px; background: var(--surface2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 12px 14px; font-size: 13px; display: none; color: var(--text2);
 }
 .upload-progress.show { display: block; }
-.progress-track {
-  height: 4px; background: var(--border); border-radius: 2px; margin-top: 8px; overflow: hidden;
-}
-.progress-fill {
-  height: 100%; background: var(--accent); border-radius: 2px;
-  transition: width 0.3s ease; width: 0%;
-}
+.progress-track { height: 4px; background: var(--bg2); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+.progress-fill { height: 100%; background: var(--accent); border-radius: 2px; transition: width 0.3s ease; width: 0%; }
 
 /* SECTION DIVIDER */
 .section-divider {
   grid-column: 1 / -1;
   display: flex; align-items: center; gap: 12px;
   color: var(--muted); font-size: 11px; font-weight: 700;
-  text-transform: uppercase; letter-spacing: 1.2px; margin: 12px 0 4px;
+  text-transform: uppercase; letter-spacing: 1.3px; margin: 14px 0 6px;
 }
 .section-divider::before, .section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
 /* FORM ACTIONS */
 .form-actions {
   display: flex; justify-content: flex-end; gap: 10px; margin-top: 28px;
-  padding-top: 20px; border-top: 1px solid var(--border);
+  padding-top: 22px; border-top: 1px solid var(--border);
   flex-wrap: wrap;
 }
-@media (max-width: 480px) {
-  .form-actions { flex-direction: column-reverse; }
-  .form-actions button { width: 100%; justify-content: center; }
-}
+@media (max-width: 480px) { .form-actions { flex-direction: column-reverse; } .form-actions button { width: 100%; justify-content: center; } }
 .btn-secondary {
-  padding: 12px 22px; background: transparent; border: 1.5px solid var(--border);
-  border-radius: 10px; color: var(--muted); font-family: 'Outfit', sans-serif;
+  padding: 13px 24px; background: transparent; border: 1.5px solid var(--border);
+  border-radius: 11px; color: var(--muted); font-family: 'DM Sans', sans-serif;
   font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.2s;
   min-height: 48px; touch-action: manipulation;
 }
-.btn-secondary:hover { border-color: var(--muted); color: var(--text); }
+.btn-secondary:hover { border-color: var(--border-strong); color: var(--text); }
 
 .btn-submit {
-  padding: 14px 28px;
-  background: linear-gradient(135deg, var(--accent), #d4902a);
-  border: none; border-radius: 10px;
-  color: #000; font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 700;
+  padding: 14px 32px;
+  background: var(--accent);
+  border: none; border-radius: 11px;
+  color: #fff; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
   cursor: pointer; display: flex; align-items: center; gap: 8px;
   transition: opacity 0.2s, transform 0.1s;
-  min-height: 50px; touch-action: manipulation;
+  min-height: 50px; touch-action: manipulation; letter-spacing: 0.2px;
 }
-.btn-submit:hover { opacity: 0.9; }
+.btn-submit:hover { opacity: 0.88; }
 .btn-submit:active { transform: scale(0.97); }
-.btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn-submit:disabled { opacity: 0.45; cursor: not-allowed; }
 
 /* TOAST */
 .toast {
   position: fixed; z-index: 999;
   bottom: calc(24px + var(--safe-bottom)); right: 20px; left: 20px;
-  max-width: 420px; margin: 0 auto;
-  background: var(--success); color: #000;
+  max-width: 440px; margin: 0 auto;
+  background: var(--success); color: #fff;
   padding: 16px 20px; border-radius: 14px;
   font-size: 14px; font-weight: 600;
   display: flex; align-items: flex-start; gap: 10px;
   transform: translateY(120px); opacity: 0;
   transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  box-shadow: 0 8px 32px rgba(56,201,110,0.3);
-  line-height: 1.4;
+  box-shadow: 0 8px 32px rgba(45,122,79,0.25);
+  line-height: 1.5;
 }
 @media (min-width: 480px) { .toast { right: 24px; left: auto; } }
 .toast.show { transform: translateY(0); opacity: 1; }
 
 /* ERROR BOX */
 .form-error {
-  background: rgba(232,85,56,0.1); border: 1.5px solid rgba(232,85,56,0.25);
+  background: rgba(200,75,47,0.07); border: 1.5px solid rgba(200,75,47,0.2);
   border-radius: 10px; padding: 12px 16px; margin-top: 16px;
   font-size: 13px; color: var(--error); display: none; line-height: 1.5;
 }
+
+/* CLOUDINARY STATUS */
+.cloudinary-status {
+  display: none; background: rgba(45,122,79,0.08); border: 1px solid rgba(45,122,79,0.2);
+  border-radius: 8px; padding: 8px 12px; margin-top: 8px; font-size: 12px; color: var(--success);
+}
+.cloudinary-status.show { display: block; }
 
 /* FOOTER */
 footer {
@@ -530,32 +525,24 @@ footer {
   border-top: 1px solid var(--border);
 }
 footer a { color: var(--accent); text-decoration: none; }
+footer strong { color: var(--text2); }
 
 /* SPINNER */
 .spinner {
-  width: 16px; height: 16px; border: 2px solid rgba(0,0,0,0.25);
-  border-top-color: #000; border-radius: 50%; animation: spin 0.6s linear infinite;
+  width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite;
   flex-shrink: 0;
-}
-.spinner-light {
-  width: 20px; height: 20px; border: 2px solid rgba(232,168,56,0.2);
-  border-top-color: var(--accent); border-radius: 50%; animation: spin 0.6s linear infinite;
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes slideUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-/* Accessibility */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
 </style>
 </head>
 <body>
-
-<div class="blob blob-1"></div>
-<div class="blob blob-2"></div>
 
 <!-- LOADING -->
 <div id="loading-screen">
@@ -621,7 +608,6 @@ footer a { color: var(--accent); text-decoration: none; }
       <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#4285F4" d="M44.5 20H24v8.5h11.8C34.7 33.9 30.1 37 24 37c-7.2 0-13-5.8-13-13s5.8-13 13-13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 11.8 2 2 11.8 2 24s9.8 22 22 22c11 0 21-8 21-22 0-1.3-.2-2.7-.5-4z"/><path fill="#34A853" d="M6.3 14.7l7 5.1C15 16.1 19.1 13 24 13c3.1 0 5.9 1.1 8.1 2.9l6.4-6.4C34.6 4.1 29.6 2 24 2 16.3 2 9.7 7.4 6.3 14.7z"/><path fill="#FBBC05" d="M24 46c5.5 0 10.5-1.9 14.4-5L31.6 35c-2.1 1.5-4.8 2.3-7.6 2.3-6 0-11.1-4-12.9-9.4l-7 5.4C7.6 41.5 15.2 46 24 46z"/><path fill="#EA4335" d="M44.5 20H24v8.5h11.8c-.9 2.5-2.6 4.7-4.9 6.2l6.8 5.3c4-3.7 6.3-9.2 6.3-16 0-1.3-.2-2.7-.5-4z"/></svg>
       Continue with Google
     </button>
-
     <p class="auth-msg" id="auth-msg"></p>
   </div>
 </div>
@@ -638,14 +624,15 @@ footer a { color: var(--accent); text-decoration: none; }
         <div class="user-avatar" id="user-initials">U</div>
         <span class="user-name" id="user-display">User</span>
       </div>
-      <button class="btn-logout" onclick="handleLogout()" type="button">Out</button>
+      <button class="btn-logout" onclick="handleLogout()" type="button">Sign Out</button>
     </div>
   </nav>
 
   <div class="hero">
     <div class="hero-badge">🔒 Secure &amp; Confidential</div>
-    <h1>Your Voice<br/><span>Deserves Action</span></h1>
+    <h1>Your Voice<br/><em>Deserves Action</em></h1>
     <p>Submit your complaint professionally. Every concern is heard, documented, and resolved with full transparency.</p>
+    <div class="deco-line"></div>
   </div>
 
   <div class="stats-row">
@@ -661,7 +648,7 @@ footer a { color: var(--accent); text-decoration: none; }
         <div class="form-header-icon">📝</div>
         <div>
           <h2>Complaint Submission Form</h2>
-          <p>Fields marked <span style="color:var(--accent2)">*</span> are required. Your data is encrypted.</p>
+          <p>Fields marked <span style="color:rgba(255,255,255,0.85)">*</span> are required. Files uploaded to Cloudinary.</p>
         </div>
       </div>
 
@@ -674,16 +661,14 @@ footer a { color: var(--accent); text-decoration: none; }
         </div>
       </div>
 
-      <form id="complaint-form" action="https://formspree.io/f/xaqvjrbz" method="POST" enctype="multipart/form-data">
+      <form id="complaint-form">
 
-        <!-- Hidden fields -->
-        <input type="hidden" name="_subject" value="New Complaint — LocalComp" />
-        <input type="hidden" name="_replyto" id="hidden-email" />
-        <input type="hidden" name="submitted_by" id="hidden-user" />
-        <input type="hidden" name="satisfaction_rating" id="hidden-rating" value="" />
-        <input type="hidden" name="urgency_level" id="hidden-urgency" value="5" />
-        <input type="hidden" name="preferred_resolution" id="hidden-resolution" value="" />
-        <input type="hidden" name="uploaded_files" id="hidden-files" value="" />
+        <!-- Hidden fields for form data collection -->
+        <input type="hidden" id="hidden-email" />
+        <input type="hidden" id="hidden-user" />
+        <input type="hidden" id="hidden-rating" value="" />
+        <input type="hidden" id="hidden-urgency" value="5" />
+        <input type="hidden" id="hidden-resolution" value="" />
 
         <div class="form-grid">
 
@@ -691,25 +676,25 @@ footer a { color: var(--accent); text-decoration: none; }
 
           <div class="form-field">
             <label>Full Name <span class="required-star">*</span></label>
-            <input type="text" name="full_name" id="full-name" placeholder="Your full name"
+            <input type="text" id="full-name" placeholder="Your full name"
               autocomplete="name" autocapitalize="words" required />
           </div>
 
           <div class="form-field">
             <label>Email Address <span class="required-star">*</span></label>
-            <input type="email" name="email" id="email-field" placeholder="you@example.com"
+            <input type="email" id="email-field" placeholder="you@example.com"
               autocomplete="email" autocapitalize="none" inputmode="email" required />
           </div>
 
           <div class="form-field">
             <label>Phone Number</label>
-            <input type="tel" name="phone" placeholder="+91 XXXXX XXXXX"
+            <input type="tel" id="phone" placeholder="+91 XXXXX XXXXX"
               autocomplete="tel" inputmode="tel" />
           </div>
 
           <div class="form-field">
             <label>City / Locality <span class="required-star">*</span></label>
-            <input type="text" name="location" placeholder="Hyderabad, Telangana"
+            <input type="text" id="location" placeholder="Hyderabad, Telangana"
               autocomplete="address-level2" required />
           </div>
 
@@ -717,7 +702,7 @@ footer a { color: var(--accent); text-decoration: none; }
 
           <div class="form-field">
             <label>Category <span class="required-star">*</span></label>
-            <select name="category" required>
+            <select id="category" required>
               <option value="" disabled selected>Select category…</option>
               <option>🏗️ Infrastructure &amp; Roads</option>
               <option>💧 Water &amp; Sanitation</option>
@@ -740,7 +725,7 @@ footer a { color: var(--accent); text-decoration: none; }
 
           <div class="form-field">
             <label>Authority / Department</label>
-            <select name="department">
+            <select id="department">
               <option value="" disabled selected>Select authority…</option>
               <option>Municipal Corporation (GHMC)</option>
               <option>Police Department</option>
@@ -759,22 +744,22 @@ footer a { color: var(--accent); text-decoration: none; }
 
           <div class="form-field full">
             <label>Complaint Title <span class="required-star">*</span></label>
-            <input type="text" name="complaint_title" placeholder="Brief summary of your complaint…" required />
+            <input type="text" id="complaint-title" placeholder="Brief summary of your complaint…" required />
           </div>
 
           <div class="form-field full">
             <label>Detailed Description <span class="required-star">*</span></label>
-            <textarea name="description" placeholder="Describe your complaint in detail. Include dates, locations, people involved, and prior attempts to resolve…" required></textarea>
+            <textarea id="description" placeholder="Describe your complaint in detail. Include dates, locations, people involved, and prior attempts to resolve…" required></textarea>
           </div>
 
           <div class="form-field">
             <label>Date of Incident <span class="required-star">*</span></label>
-            <input type="date" name="incident_date" id="incident-date" required />
+            <input type="date" id="incident-date" required />
           </div>
 
           <div class="form-field">
             <label>Is This Ongoing?</label>
-            <select name="is_ongoing">
+            <select id="is-ongoing">
               <option value="Yes">Yes, it's still happening</option>
               <option value="No">No, one-time event</option>
               <option value="Intermittent">Intermittent / Recurring</option>
@@ -785,7 +770,7 @@ footer a { color: var(--accent); text-decoration: none; }
 
           <div class="form-field">
             <label>People Affected</label>
-            <select name="people_affected">
+            <select id="people-affected">
               <option>Just me (1 person)</option>
               <option>My household (2–5)</option>
               <option>My building / street (5–50)</option>
@@ -815,33 +800,33 @@ footer a { color: var(--accent); text-decoration: none; }
               <span class="star" onclick="setRating(4)" role="button" aria-label="4 stars">★</span>
               <span class="star" onclick="setRating(5)" role="button" aria-label="5 stars">★</span>
             </div>
-            <span id="rating-label" style="font-size:12px;color:var(--muted);margin-top:4px">No rating selected</span>
+            <span id="rating-label" style="font-size:12px;color:var(--muted);margin-top:4px;display:block">No rating selected</span>
           </div>
 
           <div class="form-field full">
             <label>Type of Impact <span class="required-star">*</span></label>
             <div class="checkbox-group">
-              <label class="checkbox-item"><input type="checkbox" name="impact[]" value="Health &amp; Safety"><span>🏥 Health &amp; Safety Risk</span></label>
-              <label class="checkbox-item"><input type="checkbox" name="impact[]" value="Financial Loss"><span>💰 Financial Loss</span></label>
-              <label class="checkbox-item"><input type="checkbox" name="impact[]" value="Mental Stress"><span>🧠 Mental Stress / Harassment</span></label>
-              <label class="checkbox-item"><input type="checkbox" name="impact[]" value="Service Disruption"><span>🔌 Service Disruption</span></label>
-              <label class="checkbox-item"><input type="checkbox" name="impact[]" value="Property Damage"><span>🏚️ Property Damage</span></label>
+              <label class="checkbox-item"><input type="checkbox" class="impact-check" value="Health &amp; Safety"><span>🏥 Health &amp; Safety Risk</span></label>
+              <label class="checkbox-item"><input type="checkbox" class="impact-check" value="Financial Loss"><span>💰 Financial Loss</span></label>
+              <label class="checkbox-item"><input type="checkbox" class="impact-check" value="Mental Stress"><span>🧠 Mental Stress / Harassment</span></label>
+              <label class="checkbox-item"><input type="checkbox" class="impact-check" value="Service Disruption"><span>🔌 Service Disruption</span></label>
+              <label class="checkbox-item"><input type="checkbox" class="impact-check" value="Property Damage"><span>🏚️ Property Damage</span></label>
             </div>
           </div>
 
-          <!-- FILE UPLOAD - uses Cloudinary unsigned upload -->
+          <!-- FILE UPLOAD — Cloudinary unsigned upload -->
           <div class="form-field full">
-            <label>Supporting Evidence <span style="color:var(--muted);font-weight:400;text-transform:none">(photos, videos, docs)</span></label>
+            <label>Supporting Evidence <span style="color:var(--muted);font-weight:400;text-transform:none">(photos, videos, docs — uploaded to Cloudinary)</span></label>
             <div class="file-drop" id="file-drop" onclick="triggerUpload()" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
-              <div class="icon">📎</div>
+              <div class="icon">☁️</div>
               <p><strong>Click to upload</strong> or drag &amp; drop</p>
-              <p style="margin-top:4px">Images, videos, PDFs — up to 50MB each</p>
+              <p style="margin-top:4px">Images, videos, PDFs — up to 100MB each · Stored on Cloudinary</p>
               <button type="button" class="upload-btn-mobile" onclick="event.stopPropagation();triggerUpload()">📁 Choose Files</button>
             </div>
-            <input type="file" id="evidence-upload" name="evidence[]" style="display:none" multiple
+            <input type="file" id="evidence-upload" style="display:none" multiple
               accept="image/*,video/*,.pdf,.doc,.docx" onchange="handleFileSelect(this)" />
             <div id="upload-progress" class="upload-progress">
-              <span id="upload-status">Uploading…</span>
+              <span id="upload-status">Uploading to Cloudinary…</span>
               <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
             </div>
             <div id="file-list"></div>
@@ -863,7 +848,7 @@ footer a { color: var(--accent); text-decoration: none; }
 
           <div class="form-field">
             <label>Preferred Contact</label>
-            <select name="contact_preference">
+            <select id="contact-preference">
               <option>Email</option>
               <option>Phone Call</option>
               <option>SMS / WhatsApp</option>
@@ -873,7 +858,7 @@ footer a { color: var(--accent); text-decoration: none; }
 
           <div class="form-field">
             <label>Submission Type</label>
-            <select name="anonymous">
+            <select id="anonymous">
               <option value="No">Public (with my name)</option>
               <option value="Yes">Anonymous (hide identity)</option>
             </select>
@@ -881,7 +866,7 @@ footer a { color: var(--accent); text-decoration: none; }
 
           <div class="form-field full">
             <label>Additional Notes / Witnesses</label>
-            <textarea name="additional_notes" placeholder="Witness names, case numbers, reference IDs…" style="min-height:80px"></textarea>
+            <textarea id="additional-notes" placeholder="Witness names, case numbers, reference IDs…" style="min-height:80px"></textarea>
           </div>
 
         </div>
@@ -905,7 +890,7 @@ footer a { color: var(--accent); text-decoration: none; }
 </div>
 
 <!-- TOAST -->
-<div class="toast" id="toast" role="alert">✅ Complaint submitted! You'll receive a confirmation email shortly.</div>
+<div class="toast" id="toast" role="alert">✅ Complaint submitted successfully! Reference ID saved.</div>
 
 <!-- Firebase -->
 <script type="module">
@@ -954,22 +939,19 @@ footer a { color: var(--accent); text-decoration: none; }
 
 <script>
   // ── CLOUDINARY CONFIG ──
-  // Using unsigned upload preset — safe for client-side
-  const CLOUDINARY_CLOUD = 'democloud'; // Replace with your Cloudinary cloud name
-  const CLOUDINARY_PRESET = 'localcomp_unsigned'; // Replace with your upload preset
-  const USE_CLOUDINARY = false; // Set to true when you have Cloudinary configured
+  const CLOUDINARY_CLOUD = 'dvapzwkwk';
+  const CLOUDINARY_PRESET = 'UPLOADDATA';
+  const CLOUDINARY_FOLDER = 'localcomp_complaints';
 
   let currentRating = 0;
-  let uploadedFiles = []; // { name, url, type, size }
+  let uploadedFiles = []; // { name, url, publicId, type, size }
 
   // ── HELPERS ──
   function showMsg(text, type) {
     const el = document.getElementById('auth-msg');
     el.textContent = text;
     el.className = 'auth-msg ' + type;
-    if (type !== 'loading') {
-      setTimeout(() => { el.textContent = ''; el.className = 'auth-msg'; }, 5000);
-    }
+    if (type !== 'loading') setTimeout(() => { el.textContent = ''; el.className = 'auth-msg'; }, 5000);
   }
 
   function setAuthLoading(btnId, loading, text) {
@@ -988,14 +970,13 @@ footer a { color: var(--accent); text-decoration: none; }
     document.getElementById('login-form').style.display = tab === 'login' ? 'block' : 'none';
     document.getElementById('register-form').style.display = tab === 'register' ? 'block' : 'none';
     document.getElementById('auth-msg').textContent = '';
-    // Focus first input on mobile
     setTimeout(() => {
       const firstInput = document.querySelector(`#${tab}-form input`);
       if (firstInput && window.innerWidth > 480) firstInput.focus();
     }, 50);
   }
 
-  // ── AUTH HANDLERS ──
+  // ── AUTH ──
   async function handleLogin() {
     const email = document.getElementById('login-email').value.trim();
     const pass = document.getElementById('login-password').value;
@@ -1067,15 +1048,11 @@ footer a { color: var(--accent); text-decoration: none; }
     document.getElementById('user-initials').textContent = initials;
     document.getElementById('user-display').textContent = name;
 
-    // Pre-fill
-    const fullName = document.getElementById('full-name');
-    const emailField = document.getElementById('email-field');
-    fullName.value = user.displayName || '';
-    emailField.value = user.email || '';
+    document.getElementById('full-name').value = user.displayName || '';
+    document.getElementById('email-field').value = user.email || '';
     document.getElementById('hidden-email').value = user.email || '';
     document.getElementById('hidden-user').value = name;
 
-    // Set today as max date for incident
     const dateInput = document.getElementById('incident-date');
     if (dateInput) dateInput.max = new Date().toISOString().split('T')[0];
   }
@@ -1100,7 +1077,7 @@ footer a { color: var(--accent); text-decoration: none; }
     document.getElementById('hidden-resolution').value = radio.value;
   }
 
-  // ── FILE UPLOAD ──
+  // ── CLOUDINARY FILE UPLOAD ──
   function triggerUpload() {
     document.getElementById('evidence-upload').click();
   }
@@ -1110,7 +1087,7 @@ footer a { color: var(--accent); text-decoration: none; }
     document.getElementById('file-drop').classList.add('drag-over');
   }
 
-  function handleDragLeave(e) {
+  function handleDragLeave() {
     document.getElementById('file-drop').classList.remove('drag-over');
   }
 
@@ -1124,141 +1101,152 @@ footer a { color: var(--accent); text-decoration: none; }
   function handleFileSelect(input) {
     if (!input.files.length) return;
     processFiles(Array.from(input.files));
-    input.value = ''; // Reset so same file can be added again
+    input.value = '';
   }
 
   async function processFiles(files) {
-    const MAX_SIZE = 50 * 1024 * 1024; // 50MB
+    const MAX_SIZE = 100 * 1024 * 1024; // 100MB
     for (const file of files) {
       if (file.size > MAX_SIZE) {
-        showFileError(`${file.name} is too large (max 50MB)`);
+        showFileError(`${file.name} is too large (max 100MB)`);
         continue;
       }
-      await uploadFile(file);
+      await uploadToCloudinary(file);
     }
   }
 
-  async function uploadFile(file) {
+  async function uploadToCloudinary(file) {
     const progressEl = document.getElementById('upload-progress');
     const statusEl = document.getElementById('upload-status');
     const fillEl = document.getElementById('progress-fill');
+
     progressEl.classList.add('show');
-    statusEl.textContent = `Uploading ${file.name}…`;
+    statusEl.textContent = `Uploading ${file.name} to Cloudinary…`;
+    statusEl.style.color = '';
     fillEl.style.width = '0%';
 
-    if (USE_CLOUDINARY) {
-      // Real Cloudinary upload
-      try {
-        const formData = new FormData();
-        formData.append('file', file);
-        formData.append('upload_preset', CLOUDINARY_PRESET);
-        formData.append('folder', 'localcomp');
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', CLOUDINARY_PRESET);
+    formData.append('folder', CLOUDINARY_FOLDER);
+    formData.append('context', `original_filename=${file.name}`);
 
+    // Determine resource type
+    let resourceType = 'auto';
+    if (file.type.startsWith('image/')) resourceType = 'image';
+    else if (file.type.startsWith('video/')) resourceType = 'video';
+
+    try {
+      const uploadResult = await new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
+
         xhr.upload.onprogress = (e) => {
           if (e.lengthComputable) {
-            fillEl.style.width = Math.round(e.loaded / e.total * 100) + '%';
+            const pct = Math.round((e.loaded / e.total) * 100);
+            fillEl.style.width = pct + '%';
+            statusEl.textContent = `Uploading ${file.name}… ${pct}%`;
           }
         };
 
-        const url = await new Promise((resolve, reject) => {
-          xhr.onload = () => {
-            if (xhr.status === 200) {
-              const data = JSON.parse(xhr.responseText);
-              resolve(data.secure_url);
-            } else reject(new Error('Upload failed'));
-          };
-          xhr.onerror = reject;
-          xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/auto/upload`);
-          xhr.send(formData);
-        });
+        xhr.onload = () => {
+          if (xhr.status === 200) {
+            try {
+              resolve(JSON.parse(xhr.responseText));
+            } catch {
+              reject(new Error('Invalid response from Cloudinary'));
+            }
+          } else {
+            try {
+              const err = JSON.parse(xhr.responseText);
+              reject(new Error(err.error?.message || `Upload failed (${xhr.status})`));
+            } catch {
+              reject(new Error(`Upload failed with status ${xhr.status}`));
+            }
+          }
+        };
 
-        fillEl.style.width = '100%';
-        statusEl.textContent = 'Uploaded!';
-        addFileToList(file, url);
-        uploadedFiles.push({ name: file.name, url, type: file.type, size: file.size });
-        updateHiddenFiles();
-        setTimeout(() => progressEl.classList.remove('show'), 1500);
-      } catch (err) {
-        statusEl.textContent = 'Upload failed. File will be attached on submit.';
-        fillEl.style.width = '0%';
-        setTimeout(() => progressEl.classList.remove('show'), 2000);
-        // Fallback: store as data URL
-        storeLocally(file);
-      }
-    } else {
-      // Fallback: local preview (files sent with form via Formspree)
-      // Simulate progress
-      let p = 0;
-      const t = setInterval(() => {
-        p += 20;
-        fillEl.style.width = p + '%';
-        if (p >= 100) {
-          clearInterval(t);
-          statusEl.textContent = 'File ready to submit!';
-          setTimeout(() => progressEl.classList.remove('show'), 1200);
-        }
-      }, 80);
+        xhr.onerror = () => reject(new Error('Network error during upload'));
+        xhr.ontimeout = () => reject(new Error('Upload timed out'));
+        xhr.timeout = 120000; // 2 min timeout
 
-      storeLocally(file);
+        xhr.open('POST', `https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD}/${resourceType}/upload`);
+        xhr.send(formData);
+      });
+
+      fillEl.style.width = '100%';
+      statusEl.textContent = `✓ ${file.name} uploaded successfully`;
+      statusEl.style.color = 'var(--success)';
+
+      const fileRecord = {
+        name: file.name,
+        url: uploadResult.secure_url,
+        publicId: uploadResult.public_id,
+        type: file.type,
+        size: file.size,
+        resourceType: uploadResult.resource_type,
+        format: uploadResult.format
+      };
+
+      uploadedFiles.push(fileRecord);
+      addFileToList(file, uploadResult.secure_url, uploadResult.public_id);
+
+      setTimeout(() => progressEl.classList.remove('show'), 2000);
+
+    } catch (err) {
+      console.error('Cloudinary upload error:', err);
+      statusEl.textContent = `⚠️ Upload failed: ${err.message}`;
+      statusEl.style.color = 'var(--error)';
+      fillEl.style.width = '0%';
+      // Fallback: store locally for reference
+      const fileRecord = { name: file.name, url: null, publicId: null, type: file.type, size: file.size, error: err.message };
+      uploadedFiles.push(fileRecord);
+      addFileToList(file, null, null, err.message);
+      setTimeout(() => progressEl.classList.remove('show'), 4000);
     }
   }
 
-  function storeLocally(file) {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const dataUrl = e.target.result;
-      addFileToList(file, dataUrl);
-      uploadedFiles.push({ name: file.name, url: dataUrl, type: file.type, size: file.size });
-      updateHiddenFiles();
-    };
-    if (file.type.startsWith('image/')) {
-      reader.readAsDataURL(file);
-    } else {
-      // For non-images, just store the name
-      addFileToList(file, null);
-      uploadedFiles.push({ name: file.name, url: null, type: file.type, size: file.size });
-      updateHiddenFiles();
-    }
-  }
-
-  function addFileToList(file, url) {
+  function addFileToList(file, url, publicId, error) {
     const list = document.getElementById('file-list');
     const id = 'file-' + Date.now() + Math.random().toString(36).slice(2);
     const isImage = file.type.startsWith('image/');
     const isVideo = file.type.startsWith('video/');
     const icon = isImage ? '🖼️' : isVideo ? '🎥' : '📄';
-    const sizeStr = file.size > 1024*1024 ? (file.size/1024/1024).toFixed(1) + ' MB' : Math.round(file.size/1024) + ' KB';
+    const sizeStr = file.size > 1024*1024
+      ? (file.size/1024/1024).toFixed(1) + ' MB'
+      : Math.round(file.size/1024) + ' KB';
 
     const div = document.createElement('div');
     div.className = 'file-item';
     div.id = id;
 
+    let thumbHtml = '';
     if (isImage && url) {
-      div.innerHTML = `<img class="file-item-thumb" src="${url}" alt="${file.name}" loading="lazy"/>`;
+      thumbHtml = `<img class="file-item-thumb" src="${url}" alt="${escapeHtml(file.name)}" loading="lazy"/>`;
     } else {
-      div.innerHTML = `<div style="width:36px;height:36px;background:var(--surface);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">${icon}</div>`;
+      thumbHtml = `<div style="width:38px;height:38px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0">${icon}</div>`;
     }
 
-    div.innerHTML += `
+    const statusBadge = url
+      ? `<div class="file-item-url">☁️ Cloudinary: ${publicId || 'uploaded'}</div>`
+      : `<div style="font-size:10px;color:var(--error)">⚠️ ${error || 'Upload failed'}</div>`;
+
+    div.innerHTML = `
+      ${thumbHtml}
       <div class="file-item-info">
         <div class="file-item-name">${escapeHtml(file.name)}</div>
         <div class="file-item-size">${sizeStr}</div>
+        ${statusBadge}
       </div>
-      <button type="button" class="file-item-remove" onclick="removeFile('${id}', '${escapeHtml(file.name)}')" aria-label="Remove">✕</button>
+      <button type="button" class="file-item-remove" onclick="removeFile('${id}', '${escapeHtml(file.name).replace(/'/g,"\\'")}', '${publicId || ''}')" aria-label="Remove">✕</button>
     `;
     list.appendChild(div);
   }
 
-  function removeFile(domId, fileName) {
+  function removeFile(domId, fileName, publicId) {
     document.getElementById(domId)?.remove();
     uploadedFiles = uploadedFiles.filter(f => f.name !== fileName);
-    updateHiddenFiles();
-  }
-
-  function updateHiddenFiles() {
-    const names = uploadedFiles.map(f => f.url ? `${f.name}: ${f.url}` : f.name).join('\n');
-    document.getElementById('hidden-files').value = names;
+    // Note: To delete from Cloudinary, you'd need a server-side signed delete request
+    // Client-side delete requires your API secret which should never be exposed
   }
 
   function showFileError(msg) {
@@ -1267,24 +1255,31 @@ footer a { color: var(--accent); text-decoration: none; }
     statusEl.textContent = '⚠️ ' + msg;
     statusEl.style.color = 'var(--error)';
     progressEl.classList.add('show');
-    setTimeout(() => {
-      progressEl.classList.remove('show');
-      statusEl.style.color = '';
-    }, 3000);
+    setTimeout(() => { progressEl.classList.remove('show'); statusEl.style.color = ''; }, 3500);
   }
 
   function escapeHtml(str) {
-    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
   }
 
   // ── CLEAR FORM ──
   function clearForm() {
-    if (!confirm('Clear all fields?')) return;
+    if (!confirm('Clear all fields and remove uploaded files?')) return;
     clearFormSilent();
   }
 
   function clearFormSilent() {
-    document.getElementById('complaint-form').reset();
+    // Reset all inputs
+    ['full-name','email-field','phone','location','complaint-title','description',
+     'incident-date','additional-notes'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    ['category','department','is-ongoing','people-affected','contact-preference','anonymous'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.selectedIndex = 0;
+    });
+    document.querySelectorAll('.impact-check').forEach(c => c.checked = false);
     setRating(0);
     currentRating = 0;
     document.getElementById('rating-label').textContent = 'No rating selected';
@@ -1292,40 +1287,44 @@ footer a { color: var(--accent); text-decoration: none; }
     document.getElementById('hidden-urgency').value = '5';
     document.getElementById('hidden-rating').value = '';
     document.getElementById('hidden-resolution').value = '';
+    document.getElementById('urgency-slider').value = '5';
     document.querySelectorAll('.radio-pill').forEach(p => p.classList.remove('selected'));
+    document.querySelectorAll('input[name="resolution"]').forEach(r => r.checked = false);
     document.getElementById('file-list').innerHTML = '';
     uploadedFiles = [];
-    document.getElementById('hidden-files').value = '';
     document.getElementById('form-error').style.display = 'none';
 
-    // Re-fill user info
     const user = window.__fbAuth?.currentUser;
     if (user) {
       document.getElementById('full-name').value = user.displayName || '';
       document.getElementById('email-field').value = user.email || '';
     }
-    // Scroll to top of form
     document.getElementById('complaint-form').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
   // ── FORM SUBMISSION ──
+  // Text → Formspree | Files → Cloudinary (URLs included as text in Formspree email)
   document.getElementById('complaint-form').addEventListener('submit', async function(e) {
     e.preventDefault();
 
-    // Validate required
-    const required = this.querySelectorAll('[required]');
+    const requiredIds = ['full-name', 'email-field', 'location', 'category', 'complaint-title', 'description', 'incident-date'];
     let valid = true;
     let firstInvalid = null;
-    required.forEach(el => {
-      if (!el.value.trim()) {
+
+    requiredIds.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el || !el.value.trim()) {
         valid = false;
-        el.style.borderColor = 'var(--error)';
-        if (!firstInvalid) firstInvalid = el;
-        el.addEventListener('input', () => el.style.borderColor = '', { once: true });
+        if (el) {
+          el.style.borderColor = 'var(--error)';
+          if (!firstInvalid) firstInvalid = el;
+          el.addEventListener('input', () => el.style.borderColor = '', { once: true });
+        }
       }
     });
 
     if (!valid) {
+      document.getElementById('form-error').textContent = '⚠️ Please fill in all required fields.';
       document.getElementById('form-error').style.display = 'block';
       firstInvalid?.scrollIntoView({ behavior: 'smooth', block: 'center' });
       return;
@@ -1336,29 +1335,58 @@ footer a { color: var(--accent); text-decoration: none; }
     btn.disabled = true;
     btn.innerHTML = '<div class="spinner"></div><span>Submitting…</span>';
 
-    const formData = new FormData(this);
+    const impactValues = Array.from(document.querySelectorAll('.impact-check:checked')).map(c => c.value);
+    const refId = 'LC-' + Date.now();
 
-    // Attach actual files for Formspree
-    if (!USE_CLOUDINARY) {
-      const fileInput = document.getElementById('evidence-upload');
-      // Re-attach from uploadedFiles if needed — Formspree handles file uploads natively
-    }
+    // Build Cloudinary file links as readable text for the Formspree email
+    const fileLinks = uploadedFiles.length > 0
+      ? uploadedFiles.map((f, i) =>
+          f.url
+            ? (i+1) + '. ' + f.name + ' → ' + f.url
+            : (i+1) + '. ' + f.name + ' → (upload failed)'
+        ).join('\n')
+      : 'No files uploaded';
+
+    // Send all text fields + Cloudinary URLs to Formspree
+    const fd = new FormData();
+    fd.append('_subject', 'New Complaint [' + refId + '] — LocalComp');
+    fd.append('_replyto', document.getElementById('email-field').value);
+    fd.append('Reference_ID', refId);
+    fd.append('Submitted_At', new Date().toLocaleString());
+    fd.append('Full_Name', document.getElementById('full-name').value);
+    fd.append('Email', document.getElementById('email-field').value);
+    fd.append('Phone', document.getElementById('phone').value || 'Not provided');
+    fd.append('Location', document.getElementById('location').value);
+    fd.append('Category', document.getElementById('category').value);
+    fd.append('Department', document.getElementById('department').value || 'Not specified');
+    fd.append('Complaint_Title', document.getElementById('complaint-title').value);
+    fd.append('Description', document.getElementById('description').value);
+    fd.append('Incident_Date', document.getElementById('incident-date').value);
+    fd.append('Is_Ongoing', document.getElementById('is-ongoing').value);
+    fd.append('People_Affected', document.getElementById('people-affected').value);
+    fd.append('Urgency_Level', document.getElementById('hidden-urgency').value + ' / 10');
+    fd.append('Authority_Rating', document.getElementById('hidden-rating').value || 'Not rated');
+    fd.append('Impact_Types', impactValues.length ? impactValues.join(', ') : 'None selected');
+    fd.append('Preferred_Resolution', document.getElementById('hidden-resolution').value || 'Not specified');
+    fd.append('Contact_Preference', document.getElementById('contact-preference').value);
+    fd.append('Anonymous', document.getElementById('anonymous').value);
+    fd.append('Additional_Notes', document.getElementById('additional-notes').value || 'None');
+    fd.append('Uploaded_Files_Cloudinary', fileLinks);
 
     try {
-      const res = await fetch(this.action, {
+      const res = await fetch('https://formspree.io/f/xaqvjrbz', {
         method: 'POST',
-        body: formData,
+        body: fd,
         headers: { 'Accept': 'application/json' }
       });
 
       if (res.ok) {
-        showToast();
+        showToast('✅ Complaint submitted! Ref: ' + refId);
         clearFormSilent();
-        // Scroll to top
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         const data = await res.json().catch(() => ({}));
-        const errMsg = data.errors?.[0]?.message || data.error || 'Submission failed. Please try again.';
+        const errMsg = (data.errors && data.errors[0] && data.errors[0].message) || data.error || 'Submission failed. Please try again.';
         document.getElementById('form-error').textContent = '⚠️ ' + errMsg;
         document.getElementById('form-error').style.display = 'block';
       }
@@ -1371,33 +1399,27 @@ footer a { color: var(--accent); text-decoration: none; }
     btn.innerHTML = '<span>Submit Complaint</span><span>→</span>';
   });
 
-  function showToast() {
+  function showToast(msg) {
     const t = document.getElementById('toast');
+    t.textContent = msg || '✅ Complaint submitted successfully!';
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 6000);
   }
 
-  // ── MOBILE KEYBOARD HANDLING ──
-  // Prevent viewport jumping on iOS when keyboard opens
+  // ── MOBILE KEYBOARD ──
   if (/iPad|iPhone|iPod/.test(navigator.userAgent)) {
     document.addEventListener('focusin', (e) => {
-      if (['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName)) {
+      if (['INPUT','TEXTAREA','SELECT'].includes(e.target.tagName))
         document.body.classList.add('keyboard-open');
-      }
     });
-    document.addEventListener('focusout', () => {
-      setTimeout(() => document.body.classList.remove('keyboard-open'), 300);
-    });
+    document.addEventListener('focusout', () =>
+      setTimeout(() => document.body.classList.remove('keyboard-open'), 300));
   }
 
-  // ── STEP TABS (visual only) ──
-  function updateStepTabs() {
-    const form = document.getElementById('complaint-form');
-    const sections = ['full-name', 'complaint_title', 'evidence-upload', 'contact_preference'];
-    // Just a simple visual indicator
-    const scrolled = window.scrollY + 200;
-    const fields = form.querySelectorAll('.section-divider');
-    fields.forEach((div, i) => {
+  // ── STEP TABS ──
+  window.addEventListener('scroll', () => {
+    const dividers = document.querySelectorAll('.section-divider');
+    dividers.forEach((div, i) => {
       const rect = div.getBoundingClientRect();
       const tab = document.getElementById('step-tab-' + (i + 1));
       if (tab && rect.top < 200) {
@@ -1405,8 +1427,7 @@ footer a { color: var(--accent); text-decoration: none; }
         tab.classList.add('active');
       }
     });
-  }
-  window.addEventListener('scroll', updateStepTabs, { passive: true });
+  }, { passive: true });
 </script>
 
 </body>
